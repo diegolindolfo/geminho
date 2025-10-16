@@ -1,0 +1,9 @@
+[build]
+  # Diretório onde estão os arquivos do site (index.html)
+  publish = "public"
+  # Diretório onde estão as serverless functions
+  functions = "netlify/functions"
+
+[functions]
+  # Garante que o Node.js usado pela função é compatível com o SDK do Google
+  node_bundler = "esbuild"

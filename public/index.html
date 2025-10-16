@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Chat com Gemini na Netlify</title>
+</head>
+<body>
+    <h1>Pergunte ao Gemini (Hospedado na Netlify)</h1>
+    <input type="text" id="prompt-input" placeholder="O que é uma serverless function?" style="width: 300px;">
+    <button onclick="perguntarAoGemini()">Enviar</button>
+    <h3>Resposta:</h3>
+    <div id="response" style="white-space: pre-wrap; border: 1px solid #ccc; padding: 10px; min-height: 50px;"></div>
+
+    <script>
+        async function perguntarAoGemini() {
+            const prompt = document.getElementById('prompt-input').value;
+            const responseDiv = document.getElementById('response');
+            
+            responseDiv.textContent = 'Pensando...';
+
+            try {
+                // O URL para chamar a função na Netlify é sempre este:
+                // /.netlify/functions/NOME_DO_ARQUIVO_DA_FUNCAO
+                const response = await fetch('/.netlify/functions/gemini', {
+                    method: 'POST',
+                    body: JSON.stringify({ prompt: prompt }),
+                });
+
+                if (!response.ok) {
+                    throw new Error('A requisição para a função falhou.');
+                }
+
+                const data = await response.json();
+                responseDiv.textContent = data.text;
+
+            } catch (error) {
+                console.error('Erro:', error);
+                responseDiv.textContent = 'Ocorreu um erro. Verifique o console.';
+            }
+        }
+    </script>
+</body>
+</html>
